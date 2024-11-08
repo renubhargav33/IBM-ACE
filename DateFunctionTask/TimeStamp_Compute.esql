@@ -1,0 +1,61 @@
+
+
+
+
+
+
+
+
+CREATE COMPUTE MODULE TimeStamp_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		-- CALL CopyMessageHeaders();
+		CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+--		 declare dt date CURRENT_TIMESTAMP;
+--		 declare ch,day_in_year,hour_in_time CHARACTER;
+--		 set ch=cast(dt as CHARACTER format 'dd-MM-yy');
+--		 set day_in_year =cast(dt as CHARACTER format 'DDD-HH');
+--		 set hour_in_time =cast(dt as CHARACTER format 'DDD-hh');
+		 --set hour_in_time=cast(dt as CHARACTER format 'hh');
+		
+		
+		-- set OutputRoot.XMLNSC.Data=day_in_year || hour_in_time ;
+
+
+		declare retrieve row 'select * from REQUEST_DATA';
+
+		declare env REFERENCE to Environment.Variables;
+		set env.row[]=PASSTHRU(retrieve);
+		declare i INTEGER 1;
+		declare j INTEGER 1;
+		declare var reference to env.row[1];
+
+		while LASTMOVE(var) do
+			declare st TIMESTAMP env.row[i].CREATED_ON;
+			declare ch CHARACTER cast(st as CHARACTER format 'hh');
+			
+			if ch='02' then
+				set OutputRoot.XMLNSC.Hour.time[j]=env.row[i];
+				set j=j+1;
+			end if;
+			 
+			set i=i+1;
+			move var NEXTSIBLING;
+		end while;
+
+	END;
+END MODULE;

@@ -1,0 +1,33 @@
+
+
+
+
+CREATE COMPUTE MODULE DatbaseHour_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		-- CALL CopyMessageHeaders();
+		CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		declare i INTEGER CURRENT_TIMESTAMP-cast(3 as INTERVAL HOUR);
+		declare retrieve row 'select * from REQUEST_DATA where created_on >= ?';
+
+		declare env REFERENCE to Environment.Variables;
+		set env.row.a[]=PASSTHRU(retrieve);
+		set OutputRoot.XMLNSC.Data[]=env.row[];
+		
+		
+	END;
+END MODULE;
