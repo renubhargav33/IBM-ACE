@@ -1,0 +1,75 @@
+
+
+path crypt,logging;
+--DECLARE key EXTERNAL CHARACTER;
+
+CREATE COMPUTE MODULE postDebit_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		CALL CopyMessageHeaders();
+		CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		--SET OutputRoot.JSON.Data.Acknowledgement='Getting Success Response From AppServer';
+
+		DECLARE enc CHARACTER InputRoot.JSON.Data.enc;
+
+		DECLARE data CHARACTER;
+		call decrypt(enc, 'shreyash') INTO data;
+
+		CREATE LASTCHILD OF Environment DOMAIN('JSON') PARSE(CAST(data AS BLOB CCSID InputRoot.Properties.CodedCharSetId ENCODING InputRoot.Properties.Encoding), InputRoot.Properties.Encoding, InputRoot.Properties.CodedCharSetId );
+
+		DECLARE ref REFERENCE to Environment.JSON.Data;
+		DECLARE cardID INTEGER ref.cardId;
+		DECLARE creditAccountNumber INTEGER ref.creditAccountNumber;
+		DECLARE payAccountNumber INTEGER ref.payAccountNumber;
+		DECLARE amount INTEGER ref.amount;
+
+		DECLARE r ROW;
+		DECLARE qury CHARACTER 'Select ACCOUNTNUMBER,TOTALBALANCE from CENTRALCUSTOMERDB Where CARDID = ?';
+		SET r.res[] = PASSTHRU(qury, cardID);
+
+
+
+		IF r.res.ACCOUNTNUMBER = payAccountNumber THEN
+			IF r.res.TOTALBALANCE >= amount THEN
+				call Update_balance(payAccountNumber, creditAccountNumber, amount);
+
+				SET OutputRoot.JSON.Data.creditAccountNumber = creditAccountNumber;
+				SET OutputRoot.JSON.Data.payAccountNumber= payAccountNumber;
+				SET OutputRoot.JSON.Data.description = 'Payment Card ' || cast(cardID as CHARACTER);
+				SET OutputRoot.JSON.Data.amount = amount;
+				SET OutputRoot.JSON.Data.valueDate= CURRENT_TIMESTAMP;
+			ELSE
+				THROW USER EXCEPTION VALUES('Failure','404', '2951', 'com.sbm.eidiko.HTTPGatewayReq_FramingAPICallReq.Main, paisa nhi hai');
+			END IF;
+
+		ELSE
+			THROW USER EXCEPTION VALUES('Failure','404', '2951', 'com.sbm.eidiko.HTTPGatewayReq_FramingAPICallReq.Main, Invalid Account Number');
+		END IF;
+
+		DECLARE ref1 REFERENCE TO  OutputRoot.JSON.Data;
+		DECLARE data1 CHARACTER cast(ASBITSTREAM(ref1) as CHARACTER CCSID InputRoot.Properties.CodedCharSetId ENCODING InputRoot.Properties.Encoding);
+		call encrypt(data1, 'shreyash') into enc;
+		SET OutputRoot = NULL;
+		SET OutputRoot.JSON.Data.enc = enc;
+		
+
+	END;
+END MODULE;
+
+CREATE PROCEDURE Update_balance(In debit INTEGER, In credit INTEGER, IN amount INTEGER)
+LANGUAGE DATABASE
+EXTERNAL NAME "TransferBalance";
