@@ -1,0 +1,48 @@
+path crypt;
+
+DECLARE ex EXTERNAL CHARACTER 'C:/filelogging/Log4jConfigurationFile.xml';
+declare bol BOOLEAN;
+CREATE COMPUTE MODULE bf_mf_Compute2
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		-- CALL CopyMessageHeaders();
+		 call log(ex) into bol;
+		 CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		
+		DECLARE enc CHARACTER InputRoot.JSON.Data.enc;
+
+		DECLARE data CHARACTER;
+		call decrypt(enc, 'shreyash') INTO data;
+
+		CREATE LASTCHILD OF Environment DOMAIN('JSON') PARSE(CAST(data AS BLOB CCSID InputRoot.Properties.CodedCharSetId ENCODING InputRoot.Properties.Encoding), InputRoot.Properties.Encoding, InputRoot.Properties.CodedCharSetId );
+		
+		
+		call logic(MessageFlowLabel,'MyLogger1', 'INFO', 'Application_data: ') into bol;
+		set OutputRoot.JSON.Data=Environment.JSON.Data;
+
+	END;
+	
+END MODULE;
+create FUNCTION logic(in mfname CHARACTER, in logger_name CHARACTER, in level CHARACTER , in data CHARACTER)
+RETURNS boolean
+LANGUAGE JAVA
+EXTERNAL NAME "com.ibm.broker.IAM3.Log4jNode.log";
+
+create FUNCTION log (in configure CHARACTER) 
+RETURNS BOOLEAN
+language JAVA
+EXTERNAL NAME "com.ibm.broker.IAM3.Log4jNode.initLog4j";
