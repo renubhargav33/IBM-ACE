@@ -1,0 +1,16 @@
+
+
+CREATE DATABASE MODULE simulator_Database
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+
+	
+	declare var BLOB Root.XMLNSC.Root.payload;
+	declare id INTEGER Root.MQRFH2.usr.RequestId;
+	declare type CHARACTER Root.MQRFH2.usr.type;
+	
+	declare stm CHARACTER 'insert into REQUEST_DATA(PAYLOAD_ID,REQUEST_ID,PAYLOAD,CREATED_ON,PAYLOAD_TYPE) values(PAYLOAD_SEQUENCE.NEXTVAL,?,?,?,?)';
+	PASSTHRU(stm,id,var,CURRENT_TIMESTAMP,type);
+	END;
+
+END MODULE;

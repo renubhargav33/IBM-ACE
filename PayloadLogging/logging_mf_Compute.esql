@@ -1,0 +1,50 @@
+
+
+
+
+
+
+CREATE COMPUTE MODULE logging_mf_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		-- CALL CopyMessageHeaders();
+		CALL CopyEntireMessage();
+		RETURN FALSE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		declare var reference to InputRoot.JSON.Data;
+		DECLARE en REFERENCE to Environment.Variables;
+		set en.RequestId=var.request_id;
+		call logging('channel_request',ASBITSTREAM(var));
+		set OutputRoot.XMLNSC.Root.OutputData=InputRoot.JSON.Data;
+		--Set OutputRoot=InputRoot;
+		set en.out= OutputRoot;
+		--declare var1 reference to OutputRoot.XMLNSC.Root.OutputData;
+		call logging('channel_response',ASBITSTREAM(OutputRoot));
+		SET OutputRoot.XMLNSC= en.out;
+		propagate to TERMINAL 'out1';
+	END;
+
+	create PROCEDURE logging(in type CHARACTER,in payload BLOB )
+	BEGIN
+		SET OutputRoot = NULL;
+		declare var REFERENCE to Environment.Variables;
+		--set OutputRoot.MQMD.Format=MQFMT_RF_HEADER_2;
+		set OutputRoot.MQRFH2.usr.RequestId=var.RequestId;
+		set OutputRoot.MQRFH2.usr.type=type;
+		set OutputRoot.XMLNSC.Root.payload=payload;
+		propagate to TERMINAL 'out';
+		SET OutputRoot = NULL;
+	END;
+END MODULE;
