@@ -1,0 +1,193 @@
+
+
+CREATE COMPUTE MODULE mfes_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		-- CALL CopyMessageHeaders();
+		 CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+	
+-------------------------------------------------------------------------------------------------------------
+
+	--declare n INTEGER 1;
+--	declare var reference to InputRoot.XMLNSC.folder.field.item;
+--	
+--	declare i INTEGER 1;
+--	while lastmove(var) do 
+--		set OutputRoot.XMLNSC.result.item[i].m=var.i1;
+--		set OutputRoot.XMLNSC.result.item[i].n=var.i2;
+--		set OutputRoot.XMLNSC.result.item[i].o=var.i3;
+--		move var NEXTSIBLING;
+--		set i=i+1;
+--	end while;
+
+-------------------------------------------------------------------------------------------------------------
+--	declare var REFERENCE to InputRoot.JSON.Data.Data.ResultData.MessageArrayTest.Item[1];
+--	
+--	declare i INTEGER 1;
+--	while lastmove(var) do 
+----		set OutputRoot.XMLNSC.Result.item[i].m=var.Folder.FieldA;
+----		set OutputRoot.XMLNSC.Result.item[i].n=var.Folder.FieldB;
+--
+--		--create field OutputRoot.XMLNSC.Result.data type NameValue value 'data';
+--		create LASTCHILD of OutputRoot.XMLNSC.result.Folder[i] name 'fieldA' value var.Folder.FieldA;
+--		create LASTCHILD of OutputRoot.XMLNSC.result.Folder[i] name 'fieldB' value var.Folder.FieldB;
+--		move var NEXTSIBLING;
+--		set i=i+1;
+--	end while;
+--		
+
+---------------------------------------------------------------------------------------------------------------
+
+		
+		
+--		declare i INTEGER 1;
+--		for ch as InputRoot.XMLNSC.Data.ResultData.MessageArrayTest[] do 
+--	
+--		set OutputRoot.JSON.Data.Data.ResultData.MessageArrayTest.Folder[i].fieldA=ch.Folder.FieldA;
+--		set OutputRoot.JSON.Data.Data.ResultData.MessageArrayTest.Folder[i].fieldB=ch.Folder.FieldB;
+--		set i = i+1;
+--		end for;
+---------------------------------------------------------------------------------------------------------------
+
+--		declare i INTEGER 1;
+--		for var as InputRoot.JSON.Data.Data.Employee.Item.Item[] do 
+--			create LASTCHILD of OutputRoot.XMLNSC.Data.result[i] name 'Name' value var.Name;
+--			set i=i+1;
+--		end for;
+		
+---------------------------------------------------------------------------------------------------------------
+
+--		set OutputRoot.XMLNSC.result.statuscode=InputRoot.JSON.Data.statuscode;
+--		set OutputRoot.XMLNSC.result.message=InputRoot.JSON.Data.message;
+--		set OutputRoot.XMLNSC.result.data.customerid=InputRoot.JSON.Data.data.customerId;
+--		set OutputRoot.XMLNSC.result.data.name=InputRoot.JSON.Data.data.name;
+--		set OutputRoot.XMLNSC.result.data.shortname=InputRoot.JSON.Data.data.shortName;
+--		set OutputRoot.XMLNSC.result.data.gender=InputRoot.JSON.Data.data.gender;
+--		set OutputRoot.XMLNSC.result.data.language=InputRoot.JSON.Data.data.language;
+--		set OutputRoot.XMLNSC.result.data.segment=InputRoot.JSON.Data.data.segment;
+--		set OutputRoot.XMLNSC.result.data.nationality=InputRoot.JSON.Data.data.nationality;
+--		set OutputRoot.XMLNSC.result.data.nuit=InputRoot.JSON.Data.data.nuit;
+--		set OutputRoot.XMLNSC.result.data.branchCode=InputRoot.JSON.Data.data.branchCode;
+--		set OutputRoot.XMLNSC.result.data.status=InputRoot.JSON.Data.data.status;
+--		set OutputRoot.XMLNSC.result.data.id.type=InputRoot.JSON.Data.data.id.type;
+--		set OutputRoot.XMLNSC.result.data.id.number=InputRoot.JSON.Data.data.id.number;
+--				set OutputRoot.XMLNSC.result.data.id.number=InputRoot.JSON.Data.statuscode;
+--				set OutputRoot.XMLNSC.result.data.id.number=InputRoot.JSON.Data.statuscode;
+--				set OutputRoot.XMLNSC.result.data.id.number=InputRoot.JSON.Data.statuscode;
+--				set OutputRoot.XMLNSC.result.data.id.number=InputRoot.JSON.Data.statuscode;
+--				set OutputRoot.XMLNSC.result.data.id.number=InputRoot.JSON.Data.statuscode;
+--				set OutputRoot.XMLNSC.result.data.id.number=InputRoot.JSON.Data.statuscode;
+--				set OutputRoot.XMLNSC.result.data.id.number=InputRoot.JSON.Data.statuscode;
+--				set OutputRoot.XMLNSC.result.data.id.number=InputRoot.JSON.Data.statuscode;
+--				set OutputRoot.XMLNSC.result.data.id.number=InputRoot.JSON.Data.statuscode;
+--				
+--		
+---------------------------------------------------------------------------------------------------------------
+
+--
+--			declare i INTEGER 1;
+--			for var as InputRoot.JSON.Data.EmployeeData.Details.Item[] do 
+--				create LASTCHILD of OutputRoot.XMLNSC.Data.Result[i] name 'firstname' value var.FirstName;
+--				create LASTCHILD of OutputRoot.XMLNSC.Data.Result[i] name 'Address' value var.Address;
+--				set i=i+1;
+--			end for;
+---------------------------------------------------------------------------------------------------------------
+
+			--CREATE FIELD OutputRoot.JSON.Data.breakfast_menu.food IDENTITY(JSON.Array)food;
+--			CREATE FIELD OutputRoot.JSON.Data.breakfast_menu.food type JSON.Array;
+--			declare i INTEGER 1;
+--			for var as InputRoot.XMLNSC.breakfast_menu.food[] do 
+--				set OutputRoot.JSON.Data.breakfast_menu.food.Item[i].name=var.name;
+--				set OutputRoot.JSON.Data.breakfast_menu.food.Item[i].price=var.price;
+--				set OutputRoot.JSON.Data.breakfast_menu.food.Item[i].description=var.description;
+--				set OutputRoot.JSON.Data.breakfast_menu.food.Item[i].calories=var.calories;
+--			set i=i+1;
+--			end for;
+
+---------------------------------------------------------------------------------------------------------------
+--			declare var REFERENCE to InputRoot.XMLNSC.Data.ResultData.MessageArrayTest.Folder[1];
+--			
+--			create field OutputRoot.JSON.Data.Data.ResultData.MessageArrayText type JSON.Array;
+--			DECLARE outref REFERENCE TO OutputRoot.JSON.Data.Data.ResultData.MessageArrayText;
+--			
+--			declare i INTEGER 1;
+--			while LASTMOVE(var) do 
+--				--create lastchild of OutputRoot.JSON.Data.Data.ResultData.MessageArrayText name 'folder';
+--				set  outref.Item[i].Folder.fieldA=var.FieldA;
+--				set  outref.Item[i].Folder.fieldB=var.FieldB;
+--				set i=i+1;
+--				move var NEXTSIBLING;
+--			end while;
+
+---------------------------------------------------------------------------------------------------------------
+
+--		declare var reference to InputRoot.XMLNSC.Data.Employee.Item[1];
+--		declare i INTEGER 1;
+--		
+--		create field OutputRoot.JSON.Data.Data.Employee.Item type JSON.Array;
+--		
+--		while lastmove(var) do 
+--			create lastchild of OutputRoot.JSON.Data.Data.Employee.Item.Item[i] Name 'Name' value var.Name;
+--			
+--		set i=i+1;
+--		move var NEXTSIBLING;
+--		end while;
+---------------------------------------------------------------------------------------------------------------
+--declare var reference to InputRoot.XMLNSC.Data.Employee.Item[1];
+
+--		declare i INTEGER 1;
+--		while lastmove(var) do 
+--			create LASTCHILD of OutputRoot.XMLNSC.Data.Employee.Item[i] Name 'Name' value var.Name;
+--			set i=i+1;
+--			move var NEXTSIBLING;
+--		end while;
+---------------------------------------------------------------------------------------------------------------
+
+	declare var REFERENCE to InputRoot.JSON.Data.project.teamMembers.Item[1];
+	declare var2 REFERENCE to InputRoot.JSON.Data.project.tasks.Item[1];
+	declare var3 REFERENCE to InputRoot.JSON.Data.project.tasks.Item[1].subtasks.Item[1];
+	declare i INTEGER 1;
+	declare j INTEGER 1;
+	
+	while lastmove(var) do 
+		create LASTCHILD of OutputRoot.XMLNSC.Project.teammembers[i]  name 'memberid' value var.memberId;
+		create LASTCHILD of OutputRoot.XMLNSC.Project.teammembers[i]  name 'firstName' value var.firstName;
+		create LASTCHILD of OutputRoot.XMLNSC.Project.teammembers[i]  name 'lastName' value var.lastName;
+		create LASTCHILD of OutputRoot.XMLNSC.Project.teammembers[i]  name 'role' value var.role;
+		create LASTCHILD of OutputRoot.XMLNSC.Project.teammembers[i]  name 'email' value var.email;
+		
+		
+		create LASTCHILD of OutputRoot.XMLNSC.Project.tasks[i]  name 'taskId' value var2.taskId;
+		create LASTCHILD of OutputRoot.XMLNSC.Project.tasks[i]  name 'taskName' value var2.taskName;
+		create LASTCHILD of OutputRoot.XMLNSC.Project.tasks[i]  name 'assignedTo' value var2.assignedTo;
+		create LASTCHILD of OutputRoot.XMLNSC.Project.tasks[i]  name 'dueDate' value var2.dueDate;
+		create LASTCHILD of OutputRoot.XMLNSC.Project.tasks[i]  name 'status' value var.status;
+		
+		while LASTMOVE(var3) do 
+			create LASTCHILD of OutputRoot.XMLNSC.Project.tasks[i].subtasks[j] name 'subtaskId' value var3.subtaskId;
+			move var3 NEXTSIBLING;
+			set j=j+1;
+		end while;
+	set i=i+1;
+	move var NEXTSIBLING;
+	end WHILE;
+
+--set OutputRoot.JSON.Data=InputRoot;
+
+
+	END;
+END MODULE;

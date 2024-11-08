@@ -1,0 +1,49 @@
+
+
+CREATE COMPUTE MODULE STRING_MANIPULATION_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		-- CALL CopyMessageHeaders();
+		 CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		SET OutputRoot.XMLNSC.st.rep=replace('abcabcabc','a','xy');
+		SET OutputRoot.XMLNSC.st.trans=translate('abcabcabc','a','xy'); 
+		
+--		declare var REFERENCE to InputRoot.XMLNSC.employee.age;
+--		declare var1 REFERENCE to InputRoot.XMLNSC.employee.a;
+----
+--		set OutputRoot.XMLNSC.st.coalesce=COALESCE(var,InputRoot.XMLNSC.employee.sal,'hello');
+--		set OutputRoot.XMLNSC.st.coalesce1=COALESCE(var1,'hii');
+
+--		declare var REFERENCE to InputRoot.XMLNSC.root.message;
+--		declare var1 REFERENCE to InputRoot.XMLNSC.root.message1;
+--		
+--		set OutputRoot.XMLNSC.st.data=NULLIF(var,var1);
+
+		
+		--declare var CHARACTER overlay('eidiko' placing '123' from 4 for 0);
+--		declare var CHARACTER replace('eidiko','i','e');
+--		set OutputRoot.XMLNSC.data=var;
+	
+--		declare s,u CHARACTER;
+--		set s=SUBSTRING(var from 7);
+--		set s=UCASE(s);
+--		set u=SUBSTRING(var from 1 for 6) || s;
+--		set OutputRoot.XMLNSC.Data=u;
+
+		
+	END;
+END MODULE;

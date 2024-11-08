@@ -1,0 +1,88 @@
+
+
+CREATE COMPUTE MODULE field_functions_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		-- CALL CopyMessageHeaders();
+		 CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+--		SET OutputRoot.JSON.Data.Result = FIELDNAME(InputBody.*[<].*[1]);
+--		SET OutputRoot.JSON.Data.Result1 = FIELDNAME(InputBody.*[<]);
+--		
+--		DECLARE ns NAMESPACE 'localhost:7800';
+--		set OutputRoot.XMLNSC.Data=FIELDNAME(InputRoot.*[<].*[<].*[<]);
+--		set OutputRoot.XMLNSC.Data=FIELDNAME(InputRoot.*[<]);
+
+----------------------------------------------------------------------------------------
+--		DECLARE nsValue CHARACTER;
+--		SET nsValue = FIELDVALUE(InputRoot.XMLNSC.emp.(XMLNSC.Attribute)ns);
+--		set OutputRoot.XMLNSC.Data=nsValue;
+		
+--		set OutputRoot.XMLNSC.Data1.data=FIELDVALUE(InputRoot.XMLNSC.emp.e);
+--		set OutputRoot.XMLNSC.Data1.q=InputRoot.XMLNSC.emp.e;
+----------------------------------------------------------------------------------------
+
+--		declare var reference to InputRoot.emp.e;
+--		set OutputRoot.XMLNSC.Data=LASTMOVE(var);
+
+----------------------------------------------------------------------------------------
+--
+--		declare var reference to InputRoot.emp.e;
+--		declare var2 reference to InputRoot.emp.e[2];
+--		set OutputRoot.XMLNSC.Data=SAMEFIELD(var,var2);
+----------------------------------------------------------------------------------------
+
+--		declare var reference to InputRoot.XMLNSC.emp;
+--		set OutputRoot.XMLNSC.Result=FIELDTYPE(var);
+--		--it returns an integer value 
+----------------------------------------------------------------------------------------
+
+
+--	declare var reference to InputRoot.XMLNSC.*[1].*[1].*[3].Item[1];
+--	create field OutputRoot.JSON.Data.Root.Order.Items type JSON.Array;
+--	declare ref REFERENCE to OutputRoot.JSON.Data.Root.Order.Items;
+--	
+--	declare i INTEGER 1;
+--	while LASTMOVE(var) do 
+--		create LASTCHILD of OutputRoot.JSON.Data.Root.Order.Items.Item[i].Item name 'ProductID' value var.ProductID;
+--		--create LASTCHILD of OutputRoot.JSON.Data.Root.Order.Customer.Item[i] name 'customerid' value var.CustomerID;
+--				set i=i+1;
+--		
+--		move var NEXTSIBLING;
+--	end while;
+----------------------------------------------------------------------------------------
+
+--DECLARE s1 NAMESPACE 'namespace1';
+--SET OutputRoot.XMLNSC.s1:root.(XMLNSC.NamespaceDecl)xmlns =s1;
+--SET OutputRoot.XMLNSC.s1:root.s1:product.(XMLNSC.NamespaceDecl)xmlns='data';
+--SET OutputRoot.XMLNSC.s1:root.s1:product.s1:method =InputRoot.XMLNSC.Root.Payment.Method ;
+----------------------------------------------------------------------------------------
+
+--set OutputRoot.XMLNSC.Data.type=FIELDTYPE(InputRoot.XMLNSC.Message1.ID);
+--
+--If FIELDTYPE(InputRoot.XMLNSC.Message1.ID) is null then 
+--	set OutputRoot.XMLNSC.Data.RES='null';
+--else 
+--	set OutputRoot.XMLNSC.Data.not='not null';
+--end if;
+----------------------------------------------------------------------------------------
+--DECLARE ns4 NAMESPACE 'namespace1';
+--SET OutputRoot.JSON.Data.noPrefix = FIELDNAMESPACE(InputRoot.XMLNSC.ns4:root.ns4:example);
+----------------------------------------------------------------------------------------
+set OutputRoot.XMLNSC.Data=FIELDNAME(InputRoot.[>]);
+		
+	end;
+END MODULE;

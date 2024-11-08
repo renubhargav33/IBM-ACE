@@ -1,0 +1,59 @@
+
+
+CREATE COMPUTE MODULE conversion_MF_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		-- CALL CopyMessageHeaders();
+		 CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		
+--		declare var CHARACTER 'ddddd';
+--		
+--		declare b blob;
+--				
+--		set b= cast(var as blob CCSID 1208);
+--		
+--		set OutputRoot.JSON.Data.Result=b;
+--		
+--		declare myblob CHARACTER;
+--		
+--		set myblob= cast(b as CHARACTER CCSID 1208);
+--		
+--		set OutputRoot.JSON.Data.Result1=myblob;
+		
+---------------------------------------------------------------------------------------------------------------
+--		declare var reference to InputRoot.BLOB.BLOB;
+--		declare b CHARACTER;
+--		set b=ASBITSTREAM(var);
+--		set OutputRoot.XMLNSC.Data=b;
+---------------------------------------------------------------------------------------------------------------
+		declare var blob InputRoot.BLOB.BLOB;
+		declare ch CHARACTER;
+		set ch = cast(var as CHARACTER CCSID InputRoot.Properties.CodedCharSetId ENCODING InputRoot.Properties.Encoding);
+		
+		IF STARTSWITH(ch, '{') THEN
+			set OutputRoot = NULL;
+			create LASTCHILD of Environment domain('JSON') parse(InputRoot.BLOB.BLOB,InputRoot.Properties.Encoding,InputRoot.Properties.CodedCharSetId);
+			set OutputRoot.XMLNSC = Environment.JSON.Data;
+			--set OutputRoot.XMLNSC=InputRoot.BLOB.BLOB;
+		elseif STARTSWITH(ch,'<') then 
+			create LASTCHILD of Environment domain('XMLNSC') parse(InputRoot.BLOB.BLOB,InputRoot.Properties.Encoding,InputRoot.Properties.CodedCharSetId);
+			set OutputRoot.JSON.Data=Environment.XMLNSC;
+		else 
+			set OutputRoot.JSON.Data.Result='please provide valid data';
+		end if;
+	END;
+END MODULE;
