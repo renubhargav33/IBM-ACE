@@ -1,10 +1,12 @@
 
 
+
+
 CREATE COMPUTE MODULE bf_mf_Compute1
 	CREATE FUNCTION Main() RETURNS BOOLEAN
 	BEGIN
 		-- CALL CopyMessageHeaders();
-		 CALL CopyEntireMessage();
+		CALL CopyEntireMessage();
 		RETURN TRUE;
 	END;
 
@@ -19,11 +21,11 @@ CREATE COMPUTE MODULE bf_mf_Compute1
 	END;
 
 	CREATE PROCEDURE CopyEntireMessage() BEGIN
-declare ref REFERENCE to InputExceptionList.*[1];
+		declare ref REFERENCE to InputExceptionList.*[1];
 		declare line,number,text CHARACTER;
 		while LASTMOVE(ref) do
 			move ref LASTCHILD;
-			if ref.Number is not NULL then 
+			if ref.Number is not NULL then
 				set line=ref.Line;
 				set number=ref.Number;
 				set text=ref.Text;
@@ -31,5 +33,6 @@ declare ref REFERENCE to InputExceptionList.*[1];
 		end while;
 		set OutputRoot.XMLNSC.Ex.Line=line;
 		set OutputRoot.XMLNSC.Ex.Number=number;
-		set OutputRoot.XMLNSC.Ex.text=text;	END;
+		set OutputRoot.XMLNSC.Ex.text=text;
+	END;
 END MODULE;

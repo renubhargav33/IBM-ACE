@@ -24,7 +24,7 @@ CREATE COMPUTE MODULE bf_mf_Compute
 	CREATE PROCEDURE CopyEntireMessage() BEGIN
 	
 		--declare url CHARACTER;
-		declare ref REFERENCE to InputRoot.JSON.Data;
+		declare ref REFERENCE to InputRoot.JS.Data;
 		DECLARE code INTEGER InputRoot.HTTPInputHeader.Code;
 
 		declare query CHARACTER 'select URL from ACCOUNT where CODE=?';
