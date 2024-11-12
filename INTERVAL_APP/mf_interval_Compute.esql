@@ -1,0 +1,33 @@
+
+
+
+
+CREATE COMPUTE MODULE mf_interval_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		-- CALL CopyMessageHeaders();
+		CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+
+		set Environment.hour=CURRENT_TIMESTAMP - cast(1 as INTERVAL HOUR);
+
+		declare sq CHARACTER 'select * from REQUEST_DATA where CREATED_ON <= ?';
+
+		set Environment.data[] = PASSTHRU(sq values(Environment.hour));
+
+		set OutputRoot.XMLNSC.Data[]=Environment.data[];
+	END;
+END MODULE;
