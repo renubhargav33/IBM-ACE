@@ -1,0 +1,33 @@
+
+
+CREATE COMPUTE MODULE mf_csv_xml_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		-- CALL CopyMessageHeaders();
+		 CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		declare var reference to InputRoot.DFDL.XML_SCHEMA.record;
+		--declare var2 REFERENCE to OutputRoot.XMLNSC.result;
+		
+--		set OutputRoot.XMLNSC.result.s1=var.a;
+--		set OutputRoot.XMLNSC.result.s2=var.b;
+--		set OutputRoot.XMLNSC.result.s3=var.c;
+
+		set OutputRoot.JSON.Data.a=var.a;
+		set OutputRoot.JSON.Data.b=var.b;
+		set OutputRoot.JSON.Data.c=var.c;
+	END;
+END MODULE;
