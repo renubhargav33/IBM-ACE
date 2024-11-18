@@ -1,0 +1,19 @@
+
+
+CREATE DATABASE MODULE MF_DATABASE_NODES_Database
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		declare var reference to Root.XMLNSC.student;
+	
+	insert into Database.dsn.system.STUDENT(STID,SNAME,DESIGNATION,ADDRESS) values(var.STID,var.SNAME,var.DESIGNATION,var.ADDRESS);
+	
+	if SQLCODE=0 then 
+		SET Environment.XMLNSC.RES='for stid'|| var.STID ||'ROW inserted';
+	else 
+		set Environment.XMLNSC.RES='for stid'|| var.STID ||'ROW not inserted';
+	
+	end if;	
+		RETURN TRUE;
+	END;
+
+END MODULE;
