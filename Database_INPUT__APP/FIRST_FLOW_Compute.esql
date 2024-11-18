@@ -1,0 +1,27 @@
+
+
+CREATE COMPUTE MODULE FIRST_FLOW_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		-- CALL CopyMessageHeaders();
+		 CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		SET OutputRoot.JSON.Data=InputRoot.DataObject.ns:STUDENT.STID; 
+		SET OutputRoot.XMLNSC.details.name=InputRoot.DataObject.ns:STUDENT.SNAME;
+		SET OutputRoot.XMLNSC.details.desg=InputRoot.DataObject.ns:STUDENT.DESIGNATION;
+		SET OutputRoot.XMLNSC.details.address=InputRoot.DataObject.ns:STUDENT.ADDRESS;
+	END;
+END MODULE;
