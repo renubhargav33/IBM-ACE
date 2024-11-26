@@ -1,0 +1,21 @@
+
+
+Importing file: C:\Users\Sreenivas Bandaru\IBM\ACET12\test\SOAP_ATTACH\SOAP_ATTACH_WSDLFile.wsdl
+
+The WSDL import will proceed with bindings SOAP_ATTACH_WSDLFileSOAP.
+Creating wsdl schema document for file:///C:/Users/Sreenivas Bandaru/IBM/ACET12/test/SOAP_ATTACH/SOAP_ATTACH_WSDLFile.wsdl.
+Parsing wsdl binding {http://www.example.org/SOAP_ATTACH_WSDLFile/}SOAP_ATTACH_WSDLFileSOAP.
+Parsing wsdl binding input NewOperation.
+Parsing wsdl binding output NewOperation.
+Processing doc style for operation NewOperation.
+Populating WSDL schema SOAP_ATTACH_WSDLFile.xsd.
+Creating file SOAP_ATTACH_WSDLFile.xsd in the workspace.
+Copying source WSDL SOAP_ATTACH_WSDLFile.wsdl to SOAP_ATTACH_WSDLFile.wsdl.
+
+Elapsed time processing this message definition file: 0.169 seconds
+Number of warnings for this message definition file: 0
+
+
+Number of files processed: 1
+
+
