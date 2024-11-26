@@ -19,7 +19,7 @@ CREATE COMPUTE MODULE BlobToJson_Compute
 
 	CREATE PROCEDURE CopyEntireMessage() BEGIN
 		--DECLARE hexBlob CHARACTER CAST(InputRoot.BLOB.BLOB AS CHARACTER CCSID InputRoot.Properties.CodedCharSetId);
-		-- ```````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````+
+
 		--DECLARE asciiString CHARACTER CAST(InputRoot.BLOB.BLOB AS CHARACTER CCSID 1208);
 
 		--SET Environment.inthr = CURRENT_TIMESTAMP - CAST( 2 AS INTERVAL DAY);
