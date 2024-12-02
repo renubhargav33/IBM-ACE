@@ -10,7 +10,7 @@ CREATE COMPUTE MODULE mf_soapattach_Compute
 
 
 	CREATE PROCEDURE CopyEntireMessage() BEGIN
-		declare var REFERENCE to InputRoot.SOAP.Attachment.*.BLOB.BLOB;
+		--declare var REFERENCE to InputRoot.SOAP.Attachment.*.BLOB.BLOB;
 
 		SET OutputRoot.BLOB.BLOB = InputRoot.SOAP.Attachment.*.BLOB.BLOB;
 	END;

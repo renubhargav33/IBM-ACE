@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>JCN_DBLOG</name>
+	<name>FTP_APP</name>
 	<comment></comment>
 	<projects>
-		<project>JCN_DBLOGJava</project>
-		<project>JCN_POLICY_PROJECT</project>
+		<project>FTP_PROJECT</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

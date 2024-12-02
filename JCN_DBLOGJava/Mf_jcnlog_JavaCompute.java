@@ -33,6 +33,7 @@ public class Mf_jcnlog_JavaCompute extends MbJavaComputeNode {
 			
 			Statement st= conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
 			
+			
 			//MbMessage inpdata=inAssembly.getMessage();
 			
 			
@@ -68,14 +69,16 @@ public class Mf_jcnlog_JavaCompute extends MbJavaComputeNode {
 			String eg = getExecutionGroup().getName().toString();
 			LocalDateTime lc = LocalDateTime.now();
 			String st1= lc.toString();
-			PreparedStatement ps = conn.prepareStatement("INSERT INTO system.JCNLOG (apname,mf,broker,eg,current_timestamp) VALUES (?,?,?,?,?)");
-			ps.setString(1,app);
-			ps.setString(2,mf);
-			ps.setString(3, bro);
-			ps.setString(4, eg);
-			ps.setString(5, st1);
+			//PreparedStatement ps = conn.prepareStatement("INSERT INTO system.JCNLOG (apname,mf,broker,eg,current_timestamp) VALUES (?,?,?,?,?)");
+			PreparedStatement ps = conn.prepareStatement("DELETE FROM system.JCNLOG where mf=?");
+
+			ps.setString(1,mf);
+			//ps.setString(2,mf);
+			//ps.setString(3, bro);
+			//ps.setString(4, eg);
+			//ps.setString(5, st1);
 			ps.executeUpdate();
-			
+			//int rowsDeleted = ps.executeUpdate();
 			// End of user code
 			// ----------------------------------------------------------
 		} catch (MbException e) {

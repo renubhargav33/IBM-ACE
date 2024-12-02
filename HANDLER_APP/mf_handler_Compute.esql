@@ -1,0 +1,31 @@
+
+
+CREATE COMPUTE MODULE mf_handler_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		-- CALL CopyMessageHeaders();
+		 CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		DECLARE CONTINUE HANDLER FOR SQLSTATE LIKE '%' BEGIN END;
+		declare var CHARACTER 'insert into HAND(s1,s2,s3,s4) values(?,?,?,?)';
+		passthru(var,'1','2','3','4');
+		passthru(var,'13');
+		set OutputRoot.JS='hello';
+		Set OutputRoot.XMLNSC.Dtaa='hello';
+		passthru(var,'1f','2f','3f','4f');
+		passthru(var,'1xxxx','2xxx','3xx','4xx');
+	END;
+END MODULE;
