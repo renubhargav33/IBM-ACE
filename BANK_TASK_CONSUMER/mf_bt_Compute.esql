@@ -1,0 +1,64 @@
+
+
+
+
+
+
+
+
+
+
+CREATE COMPUTE MODULE mf_bt_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		-- CALL CopyMessageHeaders();
+		CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		declare i,j INTEGER 1;
+		declare tag CHARACTER FIELDNAME(InputRoot.XMLNSC.Root.Body.Data.[1]);
+
+		if(tag='catalog' or tag='catalogs') then
+
+
+
+		declare var REFERENCE to InputRoot.XMLNSC.Root.Body.Data.{tag}.book[1];
+		set OutputRoot.XMLNSC.Root.Header.requestId=InputRoot.XMLNSC.Root.Header.requestId;
+		set OutputRoot.XMLNSC.Root.Header.channelId=InputRoot.XMLNSC.Root.Header.channelId;
+		set OutputRoot.XMLNSC.Root.Header.requestTime=InputRoot.XMLNSC.Root.Header.requestTime;
+		--for var AS InputRoot.XMLNSC.Root.Body.Data.catalog[]
+		while LASTMOVE(var) do
+			if CONTAINS(var.author,'Corets') then
+
+				set OutputRoot.XMLNSC.Root.Body.Data.{tag}.book[j].id=var.id;
+				set OutputRoot.XMLNSC.Root.Body.Data.{tag}.book[j].author=var.author;
+				set OutputRoot.XMLNSC.Root.Body.Data.{tag}.book[j].title=var.title;
+				set OutputRoot.XMLNSC.Root.Body.Data.{tag}.book[j].genre=var.genre;
+				set OutputRoot.XMLNSC.Root.Body.Data.{tag}.book[j].publish_date=var.publish_date;
+				set OutputRoot.XMLNSC.Root.Body.Data.{tag}.book[j].description=var.description;
+
+				set j=j+1;
+			end if;
+			move var NEXTSIBLING;
+			--set i = i+1;
+		end WHILE;
+		if InputRoot.XMLNSC.Root.Header.channelId='TPH' then
+			set OutputLocalEnvironment.Destination.HTTP.RequestURL='http://localhost:7800/backend';
+		end if;
+	else
+		set OutputRoot.XMLNSC.data='wrong tag';
+	end if;
+END;
+END MODULE;
