@@ -1,13 +1,4 @@
 
-
-
-
-
-
-
-
-
-
 CREATE COMPUTE MODULE mf_bt_Compute
 	CREATE FUNCTION Main() RETURNS BOOLEAN
 	BEGIN
