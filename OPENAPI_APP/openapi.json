@@ -1,0 +1,43 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "OPENAPI_APP",
+    "version": "1.0.0",
+    "description": "OPENAPI_APP"
+  },
+  "servers": [
+    {
+      "url": "/openapi_app/v1"
+    }
+  ],
+  "components": {
+    "schemas": {}
+  },
+  "paths": {
+    "/modify": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "success"
+          }
+        }
+      },
+      "delete": {
+        "responses": {
+          "200": {
+            "description": "success"
+          }
+        },
+        "parameters": [
+          {
+            "in": "query",
+            "name": "id",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ]
+      }
+    }
+  }
+}
