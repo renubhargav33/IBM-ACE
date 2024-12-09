@@ -1,0 +1,41 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "title" : "SWAGGER_QUERY_PARAMETERS",
+    "version" : "1.0.0",
+    "description" : "SWAGGER_QUERY_PARAMETERS"
+  },
+  "paths" : {
+    "/modify" : {
+      "post" : {
+        "operationId" : "postModify",
+        "responses" : {
+          "200" : {
+            "description" : "The operation was successful."
+          }
+        },
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "description" : "Insert a modify",
+        "parameters" : [ {
+          "name" : "body",
+          "in" : "body",
+          "schema" : {
+            "type" : "string"
+          },
+          "description" : "The request body for the operation",
+          "required" : true
+        }, {
+          "name" : "id",
+          "in" : "query",
+          "type" : "integer"
+        }, {
+          "name" : "id1",
+          "in" : "query",
+          "type" : "string"
+        } ]
+      }
+    }
+  },
+  "basePath" : "/swagger_query_parameters/v1"
+}
